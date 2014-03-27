@@ -5,10 +5,9 @@ import com.artemis.Entity;
 import com.artemis.Filter;
 import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.phr.main.PixHellGame;
 import com.phr.main.components.PositionComp;
 import com.phr.main.components.TextureComp;
@@ -41,23 +40,19 @@ public class RenderSys extends EntityProcessingSystem {
 		pc = world.getMapper(PositionComp.class);
 		sc = world.getMapper(TextureComp.class);
 	}
+
 	
 	@Override
-	public void process(Entity e) {
-		// Clear the screen
-		Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y, 
-				(int) game.viewport.width, (int) game.viewport.height); 
-		Gdx.gl.glClearColor(0, 1, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+	public void process(Entity e) {	
 		PositionComp pComp = pc.get(e);
 		TextureComp sComp = sc.get(e);
 		
-		TextureRegion tr = TextureUtil.getInstance().getTexture(sComp.texName);
-		
-		camera.update();
+		Texture tr = TextureUtil.getInstance().getTexture(sComp.texName);
 		batch.setProjectionMatrix(camera.combined);
 		
 		batch.draw(tr, pComp.position.x, pComp.position.y);
+		
+		Gdx.app.log("RENDER", String.format("Drew entity at: (%f, %f) with texture: %s", 
+				pComp.position.x, pComp.position.y, sComp.texName));
 	}
 }

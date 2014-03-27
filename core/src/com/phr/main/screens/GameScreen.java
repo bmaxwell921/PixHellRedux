@@ -1,15 +1,16 @@
 package com.phr.main.screens;
 
 import com.artemis.World;
-import com.artemis.managers.PlayerManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.phr.main.PixHellGame;
 import com.phr.main.systems.BulletSystem;
+import com.phr.main.systems.DebugRenderSys;
 import com.phr.main.systems.InputSystem;
 import com.phr.main.systems.MovementSys;
 import com.phr.main.systems.RenderSys;
@@ -33,16 +34,14 @@ public class GameScreen implements Screen {
 		camera.setToOrtho(false, PixHellGame.VIRTUAL_WIDTH, PixHellGame.VIRTUAL_HEIGHT);
 
 		createWorld();
-
-		TextureUtil.getInstance().setTextureAtlas(
-				new TextureAtlas(Gdx.files
-						.internal("gameImages.atlas")));
+		TextureUtil.getInstance().loadTextures();
 		EntityFactory.createPlayer(world, 190, 20);
 	}
 
 	private void createWorld() {
 		world = new World();
 		world.setSystem(new RenderSys(game, camera, game.batch));
+		world.setSystem(new DebugRenderSys(camera));
 		world.setSystem(new MovementSys());
 		world.setSystem(new InputSystem());
 		
@@ -53,10 +52,19 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		// Clear the screen
+		Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y, 
+				(int) game.viewport.width, (int) game.viewport.height); 
+		Gdx.gl.glClearColor(0, 1, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		camera.update();
+		
 		game.batch.begin();
 		world.setDelta(delta);
 		world.process();
 		game.batch.end();
+		Gdx.app.log("RENDER", "break\n");
 	}
 
 	@Override
