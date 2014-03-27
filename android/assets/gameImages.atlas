@@ -1,0 +1,33 @@
+
+gameImages.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Enemy
+  rotate: false
+  xy: 2, 24
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Explosion
+  rotate: false
+  xy: 104, 24
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Player2
+  rotate: false
+  xy: 206, 24
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Shot
+  rotate: false
+  xy: 2, 2
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
