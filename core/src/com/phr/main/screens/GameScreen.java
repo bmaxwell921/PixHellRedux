@@ -34,7 +34,7 @@ public class GameScreen implements Screen {
 
 		TextureUtil.getInstance().setTextureAtlas(
 				new TextureAtlas(Gdx.files
-						.internal("../android/assets/gameImages.atlas")));
+						.internal("gameImages.atlas")));
 
 		createPlayer();
 	}
