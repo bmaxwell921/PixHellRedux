@@ -1,9 +1,9 @@
 package com.phr.main.util;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ArrayMap;
-import com.badlogic.gdx.utils.Disposable;
 
 
 /**
@@ -27,20 +27,17 @@ public class TextureUtil {
 		this.images = new ArrayMap<>();
 	}
 	
-	// Instance stuff
-	private TextureAtlas atlas;
-	private ArrayMap<String, TextureRegion> images;
+	private ArrayMap<String, Texture> images;
 	
-	public void setTextureAtlas(TextureAtlas atlas) {
-		this.atlas = atlas;
+	public void loadTextures() {
+		images.put("Player2", new Texture(Gdx.files.internal("Player2.png")));
+		images.put("Shot", new Texture(Gdx.files.internal("Shot.png")));
+		images.put("Enemy", new Texture(Gdx.files.internal("Enemy.png")));
+		images.put("Explosion", new Texture(Gdx.files.internal("Explosion.png")));
 	}
 	
 	// Gets the texture associated with the given name
-	public TextureRegion getTexture(String name) {
-		if (!images.containsKey(name)) {
-			images.put(name, atlas.findRegion(name));
-		}
-		
+	public Texture getTexture(String name) {		
 		return images.get(name);
 	}
 }
