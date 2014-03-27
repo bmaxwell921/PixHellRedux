@@ -1,7 +1,7 @@
 package com.phr.main.screens;
 
-import com.artemis.Entity;
 import com.artemis.World;
+import com.artemis.managers.PlayerManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,12 +9,11 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.phr.main.PixHellGame;
-import com.phr.main.components.DimensionComp;
-import com.phr.main.components.PositionComp;
-import com.phr.main.components.TextureComp;
-import com.phr.main.components.VelocityComp;
+import com.phr.main.systems.BulletSystem;
+import com.phr.main.systems.InputSystem;
 import com.phr.main.systems.MovementSys;
 import com.phr.main.systems.RenderSys;
+import com.phr.main.util.EntityFactory;
 import com.phr.main.util.TextureUtil;
 
 public class GameScreen implements Screen {
@@ -31,7 +30,6 @@ public class GameScreen implements Screen {
 		this.game = game;
 		this.camera = new OrthographicCamera();
 		
-		// TODO how to scale to this resolution??
 		camera.setToOrtho(false, PixHellGame.VIRTUAL_WIDTH, PixHellGame.VIRTUAL_HEIGHT);
 
 		createWorld();
@@ -39,35 +37,18 @@ public class GameScreen implements Screen {
 		TextureUtil.getInstance().setTextureAtlas(
 				new TextureAtlas(Gdx.files
 						.internal("gameImages.atlas")));
-
-		createPlayer();
+		EntityFactory.createPlayer(world, 190, 20);
 	}
 
 	private void createWorld() {
 		world = new World();
-		world.setSystem(new MovementSys());
 		world.setSystem(new RenderSys(game, camera, game.batch));
-
+		world.setSystem(new MovementSys());
+		world.setSystem(new InputSystem());
+		
+		// TODO why is it that when I add this system everything starts disappearing?
+		world.setSystem(new BulletSystem());
 		world.initialize();
-	}
-	
-	private void createPlayer() {
-		Entity e = world.createEntity();
-		PositionComp pc = world.createComponent(PositionComp.class);
-		pc.position.set(PixHellGame.VIRTUAL_WIDTH / 2 - 50, 20);
-		VelocityComp vc = world.createComponent(VelocityComp.class);
-		DimensionComp dc = world.createComponent(DimensionComp.class);
-		dc.height = 100;
-		dc.width = 100;
-		TextureComp tc = world.createComponent(TextureComp.class);
-		tc.texName = "Player2";
-		
-		e.addComponent(pc);
-		e.addComponent(vc);
-		e.addComponent(dc);
-		e.addComponent(tc);
-		
-		e.addToWorld();
 	}
 
 	@Override
