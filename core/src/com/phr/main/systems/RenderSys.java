@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.phr.main.PixHellGame;
 import com.phr.main.components.PositionComp;
 import com.phr.main.components.TextureComp;
 import com.phr.main.util.TextureUtil;
@@ -20,17 +21,19 @@ import com.phr.main.util.TextureUtil;
  */
 public class RenderSys extends EntityProcessingSystem {
 
-	private SpriteBatch batch;
+	private final PixHellGame game;
 	private OrthographicCamera camera;
+	private SpriteBatch batch;
 	
 	private ComponentMapper<PositionComp> pc;
 	private ComponentMapper<TextureComp> sc;
 	
 	@SuppressWarnings("unchecked")
-	public RenderSys(SpriteBatch batch, OrthographicCamera camera) {
+	public RenderSys(PixHellGame game, OrthographicCamera camera, SpriteBatch batch) {
 		super(Filter.allComponents(PositionComp.class, TextureComp.class));
-		this.batch = batch;
+		this.game = game;
 		this.camera = camera;
+		this.batch = batch;
 	}
 	
 	@Override
@@ -42,7 +45,9 @@ public class RenderSys extends EntityProcessingSystem {
 	@Override
 	public void process(Entity e) {
 		// Clear the screen
-		Gdx.gl.glClearColor(0, 0, 0, 0);
+		Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y, 
+				(int) game.viewport.width, (int) game.viewport.height); 
+		Gdx.gl.glClearColor(0, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		PositionComp pComp = pc.get(e);

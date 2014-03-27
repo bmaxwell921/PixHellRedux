@@ -6,6 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.phr.main.PixHellGame;
 import com.phr.main.components.DimensionComp;
 import com.phr.main.components.PositionComp;
@@ -28,7 +30,9 @@ public class GameScreen implements Screen {
 	public GameScreen(final PixHellGame game) {
 		this.game = game;
 		this.camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
+		
+		// TODO how to scale to this resolution??
+		camera.setToOrtho(false, PixHellGame.VIRTUAL_WIDTH, PixHellGame.VIRTUAL_HEIGHT);
 
 		createWorld();
 
@@ -42,7 +46,7 @@ public class GameScreen implements Screen {
 	private void createWorld() {
 		world = new World();
 		world.setSystem(new MovementSys());
-		world.setSystem(new RenderSys(game.batch, camera));
+		world.setSystem(new RenderSys(game, camera, game.batch));
 
 		world.initialize();
 	}
@@ -50,7 +54,7 @@ public class GameScreen implements Screen {
 	private void createPlayer() {
 		Entity e = world.createEntity();
 		PositionComp pc = world.createComponent(PositionComp.class);
-		pc.position.set(190, 20);
+		pc.position.set(PixHellGame.VIRTUAL_WIDTH / 2 - 50, 20);
 		VelocityComp vc = world.createComponent(VelocityComp.class);
 		DimensionComp dc = world.createComponent(DimensionComp.class);
 		dc.height = 100;
@@ -76,13 +80,28 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		float centerX = width / 2f;
-		float centerY = height / 2f;
+		float aspectRatio = (float) width / (float) height;
+		float scale = 1f;
+		Vector2 crop = new Vector2();
 
-		camera.position.set(centerX, centerY, 0);
-		camera.viewportWidth = width;
-		camera.viewportHeight = height;
+        if(aspectRatio > PixHellGame.ASPECT_RATIO)
+        {
+            scale = (float)height/(float)PixHellGame.VIRTUAL_HEIGHT;
+            crop.x = (width - PixHellGame.VIRTUAL_WIDTH*scale)/2f;
+        }
+        else if(aspectRatio < PixHellGame.ASPECT_RATIO)
+        {
+            scale = (float)width/(float)PixHellGame.VIRTUAL_WIDTH;
+            crop.y = (height - PixHellGame.VIRTUAL_HEIGHT*scale)/2f;
+        }
+        else
+        {
+            scale = (float)width/(float)PixHellGame.VIRTUAL_WIDTH;
+        }
 
+        float w = (float)PixHellGame.VIRTUAL_WIDTH*scale;
+        float h = (float)PixHellGame.VIRTUAL_HEIGHT*scale;
+        game.viewport = new Rectangle(crop.x, crop.y, w, h);
 	}
 
 	@Override

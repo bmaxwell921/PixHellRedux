@@ -10,8 +10,8 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		packImages();
 		config.title = "PixHellRedux";
-		config.width = PixHellGame.WIDTH;
-		config.height = PixHellGame.HEIGHT;
+		config.width = PixHellGame.VIRTUAL_WIDTH;
+		config.height = PixHellGame.VIRTUAL_HEIGHT;
 		new LwjglApplication(new PixHellGame(), config);
 	}
 	
