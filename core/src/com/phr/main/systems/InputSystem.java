@@ -8,6 +8,7 @@ import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Input.Peripheral;
+import com.badlogic.gdx.math.MathUtils;
 import com.phr.main.components.PlayerComp;
 import com.phr.main.components.VelocityComp;
 
@@ -40,6 +41,9 @@ public class InputSystem extends EntityProcessingSystem {
 		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			dRate = 1;
 		}
+		
+		// Round here to make the image rotation look nice
+		dRate = MathUtils.round(dRate);
 		VelocityComp vc = vcm.get(e);
 		vc.velocity.x = dRate * MAX_SPEED;	
 	}
