@@ -1,16 +1,19 @@
 package com.phr.main.screens;
 
+import com.artemis.Entity;
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.phr.main.PixHellGame;
+import com.phr.main.components.SpawnComp;
 import com.phr.main.systems.BulletSystem;
 import com.phr.main.systems.DebugRenderSys;
+import com.phr.main.systems.EnemySpawnSys;
+import com.phr.main.systems.EntityRemoveSys;
 import com.phr.main.systems.InputSystem;
 import com.phr.main.systems.MovementSys;
 import com.phr.main.systems.RenderSys;
@@ -44,10 +47,20 @@ public class GameScreen implements Screen {
 		world.setSystem(new DebugRenderSys(camera));
 		world.setSystem(new MovementSys());
 		world.setSystem(new InputSystem());
+		world.setSystem(new EnemySpawnSys());
+		world.setSystem(new EntityRemoveSys());
 		
 		// TODO why is it that when I add this system everything starts disappearing?
 		world.setSystem(new BulletSystem());
 		world.initialize();
+		
+		createEnemySpawner();
+	}
+	
+	private void createEnemySpawner() {
+		Entity e = world.createEntity();
+		e.addComponent(world.createComponent(SpawnComp.class));
+		e.addToWorld();
 	}
 
 	@Override
@@ -64,7 +77,6 @@ public class GameScreen implements Screen {
 		world.setDelta(delta);
 		world.process();
 		game.batch.end();
-		Gdx.app.log("RENDER", "break\n");
 	}
 
 	@Override
