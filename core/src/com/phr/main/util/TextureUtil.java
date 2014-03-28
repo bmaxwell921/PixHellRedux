@@ -27,17 +27,17 @@ public class TextureUtil {
 		this.images = new ArrayMap<>();
 	}
 	
-	private ArrayMap<String, Texture> images;
+	private ArrayMap<String, TextureRegion> images;
 	
 	public void loadTextures() {
-		images.put("Player2", new Texture(Gdx.files.internal("Player2.png")));
-		images.put("Shot", new Texture(Gdx.files.internal("Shot.png")));
-		images.put("Enemy", new Texture(Gdx.files.internal("Enemy.png")));
-		images.put("Explosion", new Texture(Gdx.files.internal("Explosion.png")));
+		images.put("Player2", new TextureRegion(new Texture(Gdx.files.internal("Player2.png"))));
+		images.put("Shot", new TextureRegion(new Texture(Gdx.files.internal("Shot.png"))));
+		images.put("Enemy", new TextureRegion(new Texture(Gdx.files.internal("Enemy.png"))));
+		images.put("Explosion", new TextureRegion(new Texture(Gdx.files.internal("Explosion.png"))));
 	}
 	
 	// Gets the texture associated with the given name
-	public Texture getTexture(String name) {		
+	public TextureRegion getTexture(String name) {		
 		return images.get(name);
 	}
 }
