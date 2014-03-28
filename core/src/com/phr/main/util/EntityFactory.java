@@ -2,6 +2,9 @@ package com.phr.main.util;
 
 import com.artemis.Entity;
 import com.artemis.World;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
+import com.phr.main.PixHellGame;
 import com.phr.main.components.DimensionComp;
 import com.phr.main.components.FireRateComp;
 import com.phr.main.components.PlayerComp;
@@ -15,6 +18,9 @@ import com.phr.main.components.VelocityComp;
  *
  */
 public class EntityFactory {
+	
+	public static final int SHIP_SIZE = 50;
+	public static final int BULLET_SIZE = 10;
 
 	public static void createPlayer(World world, float x, float y) {
 		Entity e = world.createEntity();
@@ -27,8 +33,8 @@ public class EntityFactory {
 		e.addComponent(vc);
 		
 		DimensionComp dc = world.createComponent(DimensionComp.class);
-		dc.height = 100;
-		dc.width = 100;
+		dc.height = SHIP_SIZE;
+		dc.width = SHIP_SIZE;
 		e.addComponent(dc);
 		
 		TextureComp tc = world.createComponent(TextureComp.class);
@@ -46,7 +52,7 @@ public class EntityFactory {
 		e.addToWorld();
 	}
 	
-	public static void createBullet(World world, float x, float y) {
+	public static void createBullet(World world, float x, float y, float dir) {
 		Entity e = world.createEntity();
 		
 		PositionComp pc = world.createComponent(PositionComp.class);
@@ -54,17 +60,45 @@ public class EntityFactory {
 		e.addComponent(pc);
 		
 		VelocityComp vc = world.createComponent(VelocityComp.class);
-		vc.velocity.set(0, 100);
+		vc.velocity.set(0, 100 * dir);
 		e.addComponent(vc);
 		
 		DimensionComp dc = world.createComponent(DimensionComp.class);
-		dc.height = 20;
-		dc.width = 20;
+		dc.height = BULLET_SIZE;
+		dc.width = BULLET_SIZE;
 		e.addComponent(dc);
 		
 		TextureComp tc = world.createComponent(TextureComp.class);
 		tc.texName = "Shot";
 		e.addComponent(tc);
+		
+		e.addToWorld();
+	}
+	
+	public static void createEnemy(World world) {
+		Entity e = world.createEntity();
+		
+		PositionComp pc = world.createComponent(PositionComp.class);
+		pc.position.set(MathUtils.random(0, PixHellGame.VIRTUAL_WIDTH - SHIP_SIZE), PixHellGame.VIRTUAL_HEIGHT);
+		e.addComponent(pc);
+		
+		VelocityComp vc = world.createComponent(VelocityComp.class);
+		vc.velocity.set(0, -75);
+		e.addComponent(vc);
+		
+		DimensionComp dc = world.createComponent(DimensionComp.class);
+		dc.height = SHIP_SIZE;
+		dc.width = SHIP_SIZE;
+		e.addComponent(dc);
+		
+		TextureComp tc = world.createComponent(TextureComp.class);
+		tc.texName = "Enemy";
+		e.addComponent(tc);
+		
+		FireRateComp frc = world.createComponent(FireRateComp.class);
+		frc.fireRate = 2f;
+		frc.nextShot = 0;
+		e.addComponent(frc);
 		
 		e.addToWorld();
 	}

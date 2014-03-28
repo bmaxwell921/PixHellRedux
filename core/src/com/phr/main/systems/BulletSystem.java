@@ -7,6 +7,7 @@ import com.artemis.systems.EntityProcessingSystem;
 import com.phr.main.components.DimensionComp;
 import com.phr.main.components.FireRateComp;
 import com.phr.main.components.PositionComp;
+import com.phr.main.components.VelocityComp;
 import com.phr.main.util.EntityFactory;
 
 public class BulletSystem extends EntityProcessingSystem {
@@ -14,6 +15,7 @@ public class BulletSystem extends EntityProcessingSystem {
 	private ComponentMapper<PositionComp> pcm;
 	private ComponentMapper<FireRateComp> frcm;
 	private ComponentMapper<DimensionComp> dcm;
+	private ComponentMapper<VelocityComp> vcm;
 	
 	@SuppressWarnings("unchecked")
 	public BulletSystem() {
@@ -25,6 +27,7 @@ public class BulletSystem extends EntityProcessingSystem {
 		pcm = world.getMapper(PositionComp.class);
 		frcm = world.getMapper(FireRateComp.class);
 		dcm = world.getMapper(DimensionComp.class);
+		vcm = world.getMapper(VelocityComp.class);
 	}
 
 	@Override
@@ -35,7 +38,8 @@ public class BulletSystem extends EntityProcessingSystem {
 		if (frc.nextShot <= 0) {
 			PositionComp pc = pcm.get(e);
 			DimensionComp dc = dcm.get(e);
-			EntityFactory.createBullet(world, pc.position.x + dc.width / 2 - 10, pc.position.y + dc.height / 2 - 10);
+			VelocityComp vc = vcm.get(e);
+			EntityFactory.createBullet(world, pc.position.x + dc.width / 2 - 10, pc.position.y + dc.height / 2 - 10, vc.velocity.y < 0 ? -1 : 1);
 			
 			frc.nextShot = frc.fireRate;
 		}
