@@ -7,6 +7,7 @@ import com.phr.main.screens.GameScreen;
 
 public class PixHellGame extends Game {
 
+	public static final int ENEMY_SPAWN = 1;
 	public static final int VIRTUAL_WIDTH = 500;
 	public static final int VIRTUAL_HEIGHT = 800;
 	public static final float ASPECT_RATIO = ((float) VIRTUAL_WIDTH) / ((float) VIRTUAL_HEIGHT);
