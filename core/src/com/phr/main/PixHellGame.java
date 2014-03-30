@@ -13,6 +13,9 @@ public class PixHellGame extends Game {
 	public static final float ASPECT_RATIO = ((float) VIRTUAL_WIDTH) / ((float) VIRTUAL_HEIGHT);
 	public Rectangle viewport;
 	
+	public static final int MAX_Y = 350;
+	public static final int MIN_Y = 20;
+	
 	// SB used for drawing sprites
 	public SpriteBatch batch;
 	
