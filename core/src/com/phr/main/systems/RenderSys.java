@@ -86,8 +86,10 @@ public class RenderSys extends EntityProcessingSystem {
 	// Uses the velocity to figure out which direction an entity is moving in
 	// then it calculates the rotation of that direction from the up vector
 	private float calcRotation(Vector2 velocity) {
-		
+		if (velocity.equals(Vector2.Zero)) {
+			return 0;
+		}
 		return (float) -((Math.atan2(velocity.x
-				- 0, -(velocity.y - 1)) * 180.0d / Math.PI));
+				- 0, (velocity.y - 1)) * 180.0d / Math.PI));
 	}
 }
