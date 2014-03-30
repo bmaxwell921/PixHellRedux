@@ -33,18 +33,28 @@ public class InputSystem extends EntityProcessingSystem {
 
 	@Override
 	protected void process(Entity e) {
-		float dRate = 0;
+		float xRate = 0;
+		float yRate = 0;
 		if (accel) {
-			dRate = -Gdx.input.getAccelerometerX();
+			xRate = -Gdx.input.getAccelerometerX();
+			yRate = Gdx.input.getAccelerometerY();
 		} else if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-			dRate = -1;
+			xRate = -1;
 		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-			dRate = 1;
+			xRate = 1;
+		} 
+		
+		if (Gdx.input.isKeyPressed(Keys.UP)) {
+			yRate = 1;
+		} else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+			yRate = -1;
 		}
 		
 		// Round here to make the image rotation look nice
-		dRate = MathUtils.round(dRate);
+		xRate = MathUtils.round(xRate);
+		yRate = MathUtils.round(yRate);
 		VelocityComp vc = vcm.get(e);
-		vc.velocity.x = dRate * MAX_SPEED;	
+		vc.velocity.x = xRate * MAX_SPEED;
+		vc.velocity.y = yRate * MAX_SPEED;
 	}
 }

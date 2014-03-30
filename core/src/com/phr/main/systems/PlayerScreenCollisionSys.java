@@ -36,5 +36,11 @@ public class PlayerScreenCollisionSys extends EntityProcessingSystem {
 		if (pc.position.x + dc.width > PixHellGame.VIRTUAL_WIDTH) {
 			pc.position.x = PixHellGame.VIRTUAL_WIDTH - dc.width;
 		}
+		if (pc.position.y < PixHellGame.MIN_Y) {
+			pc.position.y = PixHellGame.MIN_Y;
+		}
+		if (pc.position.y + dc.height > PixHellGame.MAX_Y) {
+			pc.position.y = PixHellGame.MAX_Y - dc.height;
+		}
 	}
 }
