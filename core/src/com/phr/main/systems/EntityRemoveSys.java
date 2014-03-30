@@ -37,7 +37,7 @@ public class EntityRemoveSys extends EntityProcessingSystem {
 		if (!inBounds(pc, dc)) {
 			e.deleteFromWorld();
 			
-			Gdx.app.log("Entity Remove", "Removed entity from the game");
+//			Gdx.app.log("Entity Remove", "Removed entity from the game");
 		}
 	}
 	
