@@ -18,6 +18,7 @@ import com.phr.main.systems.EnemySpawnSys;
 import com.phr.main.systems.EntityRemoveSys;
 import com.phr.main.systems.InputSystem;
 import com.phr.main.systems.MovementSys;
+import com.phr.main.systems.PlayerScreenCollisionSys;
 import com.phr.main.systems.RemoveTimerSys;
 import com.phr.main.systems.RenderSys;
 import com.phr.main.util.EntityFactory;
@@ -56,6 +57,7 @@ public class GameScreen implements Screen {
 		world.setSystem(new BulletSystem());
 		world.setSystem(new CollisionSys());
 		world.setSystem(new RemoveTimerSys());
+		world.setSystem(new PlayerScreenCollisionSys());
 		
 		world.setManager(new GroupManager());
 		
