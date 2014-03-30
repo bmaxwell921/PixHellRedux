@@ -14,7 +14,7 @@ public class PixHellGame extends Game {
 	public Rectangle viewport;
 	
 	public static final int MAX_Y = 350;
-	public static final int MIN_Y = 20;
+	public static final int MIN_Y = 0;
 	
 	// SB used for drawing sprites
 	public SpriteBatch batch;
