@@ -3,6 +3,7 @@ package com.phr.main.systems;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.Filter;
+import com.artemis.managers.GroupManager;
 import com.artemis.systems.EntityProcessingSystem;
 import com.phr.main.components.DamageComp;
 import com.phr.main.components.DimensionComp;
@@ -39,13 +40,15 @@ public class BulletSystem extends EntityProcessingSystem {
 
 		frc.nextShot -= world.getDelta();
 		if (frc.nextShot <= 0) {
+			GroupManager gm = world.getManager(GroupManager.class);
 			PositionComp pc = pcm.get(e);
 			DimensionComp dc = dcm.get(e);
 			VelocityComp vc = vcm.get(e);
 			EntityFactory.createBullet(world, pc.position.x + dc.width / 2
 					- EntityFactory.BULLET_SIZE / 2, pc.position.y + dc.height
 					/ 2 - EntityFactory.BULLET_SIZE / 2, vc.velocity.y < 0 ? -1
-					: 1, dmcm.get(e).damage);
+					: 1, dmcm.get(e).damage,
+					gm.getGroups(e).contains(EntityFactory.PLAYER, true));
 
 			frc.nextShot = frc.fireRate;
 		}
