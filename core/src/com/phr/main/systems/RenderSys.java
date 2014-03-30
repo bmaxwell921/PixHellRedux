@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.phr.main.PixHellGame;
 import com.phr.main.components.DimensionComp;
@@ -86,10 +87,6 @@ public class RenderSys extends EntityProcessingSystem {
 	// Uses the velocity to figure out which direction an entity is moving in
 	// then it calculates the rotation of that direction from the up vector
 	private float calcRotation(Vector2 velocity) {
-		if (velocity.equals(Vector2.Zero)) {
-			return 0;
-		}
-		return (float) -((Math.atan2(velocity.x
-				- 0, (velocity.y - 1)) * 180.0d / Math.PI));
+		return 360 - (float) MathUtils.atan2(velocity.x, velocity.y) * MathUtils.radiansToDegrees;
 	}
 }
