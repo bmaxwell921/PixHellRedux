@@ -2,6 +2,7 @@ package com.phr.main.util;
 
 import com.artemis.Entity;
 import com.artemis.World;
+import com.artemis.managers.GroupManager;
 import com.badlogic.gdx.math.MathUtils;
 import com.phr.main.PixHellGame;
 import com.phr.main.components.DamageComp;
@@ -11,6 +12,7 @@ import com.phr.main.components.HealthComp;
 import com.phr.main.components.PlayerComp;
 import com.phr.main.components.PositionComp;
 import com.phr.main.components.TextureComp;
+import com.phr.main.components.TimerComp;
 import com.phr.main.components.VelocityComp;
 
 /**
@@ -19,6 +21,12 @@ import com.phr.main.components.VelocityComp;
  *
  */
 public class EntityFactory {
+	
+	// Groups
+	public static final String PLAYER = "P";
+	public static final String ENEMY = "E";
+	public static final String PLAYER_BULLET = "PB";
+	public static final String ENEMY_BULLET = "EB";
 	
 	public static final int SHIP_SIZE = 50;
 	public static final int BULLET_SIZE = 10;
@@ -64,10 +72,12 @@ public class EntityFactory {
 		dmc.damage = PLAYER_DAMAGE;
 		e.addComponent(dmc);
 		
+		world.getManager(GroupManager.class).add(e, PLAYER);
+		
 		e.addToWorld();
 	}
 	
-	public static void createBullet(World world, float x, float y, float dir, int damage) {
+	public static void createBullet(World world, float x, float y, float dir, int damage, boolean playerBullet) {
 		Entity e = world.createEntity();
 		
 		PositionComp pc = world.createComponent(PositionComp.class);
@@ -90,6 +100,8 @@ public class EntityFactory {
 		DamageComp dmc = world.createComponent(DamageComp.class);
 		dmc.damage = damage;
 		e.addComponent(dmc);
+		
+		world.getManager(GroupManager.class).add(e, playerBullet ? PLAYER_BULLET : ENEMY_BULLET);
 		
 		e.addToWorld();
 	}
@@ -126,6 +138,37 @@ public class EntityFactory {
 		DamageComp dmc = world.createComponent(DamageComp.class);
 		dmc.damage = ENEMY_DAMAGE;
 		e.addComponent(dmc);
+		
+		world.getManager(GroupManager.class).add(e, ENEMY);
+		
+		e.addToWorld();
+	}
+	
+	public static void createExplosion(World world, float x, float y, float xv, float yv) {
+		Entity e = world.createEntity();
+		
+		PositionComp pc = world.createComponent(PositionComp.class);
+		pc.position.x = x;
+		pc.position.y = y;
+		e.addComponent(pc);
+		
+		DimensionComp dc = world.createComponent(DimensionComp.class);
+		dc.width = SHIP_SIZE;
+		dc.height = SHIP_SIZE;
+		e.addComponent(dc);
+		
+		VelocityComp vc = world.createComponent(VelocityComp.class);
+		vc.velocity.x = xv * .35f;
+		vc.velocity.y = yv * .35f;
+		e.addComponent(vc);
+		
+		TextureComp tc = world.createComponent(TextureComp.class);
+		tc.texName = "Explosion";
+		e.addComponent(tc);
+		
+		TimerComp tmc = world.createComponent(TimerComp.class);
+		tmc.start(50);
+		e.addComponent(tmc);
 		
 		e.addToWorld();
 	}
