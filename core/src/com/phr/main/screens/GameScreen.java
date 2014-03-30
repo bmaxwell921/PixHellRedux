@@ -2,7 +2,9 @@ package com.phr.main.screens;
 
 import com.artemis.Entity;
 import com.artemis.World;
+import com.artemis.managers.GroupManager;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,17 +13,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.phr.main.PixHellGame;
 import com.phr.main.components.SpawnComp;
 import com.phr.main.systems.BulletSystem;
-import com.phr.main.systems.DebugRenderSys;
+import com.phr.main.systems.CollisionSys;
 import com.phr.main.systems.EnemySpawnSys;
 import com.phr.main.systems.EntityRemoveSys;
 import com.phr.main.systems.InputSystem;
 import com.phr.main.systems.MovementSys;
+import com.phr.main.systems.RemoveTimerSys;
 import com.phr.main.systems.RenderSys;
 import com.phr.main.util.EntityFactory;
 import com.phr.main.util.TextureUtil;
 
 public class GameScreen implements Screen {
 
+	public static boolean DEBUGGING = false;
+	
 	// The game
 	private final PixHellGame game;
 
@@ -44,15 +49,18 @@ public class GameScreen implements Screen {
 	private void createWorld() {
 		world = new World();
 		world.setSystem(new RenderSys(game, camera, game.batch));
-//		world.setSystem(new DebugRenderSys(camera));
 		world.setSystem(new MovementSys());
 		world.setSystem(new InputSystem());
 		world.setSystem(new EnemySpawnSys());
 		world.setSystem(new EntityRemoveSys());
-		
 		world.setSystem(new BulletSystem());
-		world.initialize();
+		world.setSystem(new CollisionSys());
+		world.setSystem(new RemoveTimerSys());
 		
+		world.setManager(new GroupManager());
+		
+//		world.setSystem(new DebugRenderSys(camera));
+		world.initialize();
 		createEnemySpawner();
 	}
 	
@@ -61,7 +69,7 @@ public class GameScreen implements Screen {
 		e.addComponent(world.createComponent(SpawnComp.class));
 		e.addToWorld();
 	}
-
+	
 	@Override
 	public void render(float delta) {
 		// Clear the screen
@@ -76,6 +84,11 @@ public class GameScreen implements Screen {
 		world.setDelta(delta);
 		world.process();
 		game.batch.end();
+		
+		if (Gdx.input.isKeyPressed(Keys.ENTER)) {
+			DEBUGGING = !DEBUGGING;
+			Gdx.app.log("DEBUG", "Toggled debugging to: " + DEBUGGING);
+		}
 	}
 
 	@Override
