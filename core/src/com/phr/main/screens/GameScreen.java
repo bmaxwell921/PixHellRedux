@@ -44,13 +44,12 @@ public class GameScreen implements Screen {
 	private void createWorld() {
 		world = new World();
 		world.setSystem(new RenderSys(game, camera, game.batch));
-		world.setSystem(new DebugRenderSys(camera));
+//		world.setSystem(new DebugRenderSys(camera));
 		world.setSystem(new MovementSys());
 		world.setSystem(new InputSystem());
 		world.setSystem(new EnemySpawnSys());
 		world.setSystem(new EntityRemoveSys());
 		
-		// TODO why is it that when I add this system everything starts disappearing?
 		world.setSystem(new BulletSystem());
 		world.initialize();
 		
