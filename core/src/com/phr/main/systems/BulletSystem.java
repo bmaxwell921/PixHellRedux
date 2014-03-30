@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.Filter;
 import com.artemis.systems.EntityProcessingSystem;
+import com.phr.main.components.DamageComp;
 import com.phr.main.components.DimensionComp;
 import com.phr.main.components.FireRateComp;
 import com.phr.main.components.PositionComp;
@@ -16,6 +17,7 @@ public class BulletSystem extends EntityProcessingSystem {
 	private ComponentMapper<FireRateComp> frcm;
 	private ComponentMapper<DimensionComp> dcm;
 	private ComponentMapper<VelocityComp> vcm;
+	private ComponentMapper<DamageComp> dmcm;
 
 	@SuppressWarnings("unchecked")
 	public BulletSystem() {
@@ -28,6 +30,7 @@ public class BulletSystem extends EntityProcessingSystem {
 		frcm = world.getMapper(FireRateComp.class);
 		dcm = world.getMapper(DimensionComp.class);
 		vcm = world.getMapper(VelocityComp.class);
+		dmcm = world.getMapper(DamageComp.class);
 	}
 
 	@Override
@@ -39,9 +42,10 @@ public class BulletSystem extends EntityProcessingSystem {
 			PositionComp pc = pcm.get(e);
 			DimensionComp dc = dcm.get(e);
 			VelocityComp vc = vcm.get(e);
-			EntityFactory.createBullet(world,
-					pc.position.x + dc.width / 2 - EntityFactory.BULLET_SIZE / 2, pc.position.y
-							+ dc.height / 2 - EntityFactory.BULLET_SIZE / 2, vc.velocity.y < 0 ? -1 : 1);
+			EntityFactory.createBullet(world, pc.position.x + dc.width / 2
+					- EntityFactory.BULLET_SIZE / 2, pc.position.y + dc.height
+					/ 2 - EntityFactory.BULLET_SIZE / 2, vc.velocity.y < 0 ? -1
+					: 1, dmcm.get(e).damage);
 
 			frc.nextShot = frc.fireRate;
 		}
