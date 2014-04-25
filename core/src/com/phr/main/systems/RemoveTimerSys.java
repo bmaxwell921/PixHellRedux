@@ -3,6 +3,7 @@ package com.phr.main.systems;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.Filter;
+import com.artemis.managers.GroupManager;
 import com.artemis.systems.EntityProcessingSystem;
 import com.phr.main.components.TimerComp;
 
@@ -27,6 +28,8 @@ public class RemoveTimerSys extends EntityProcessingSystem {
 		
 		if (tc.timeUntil <= 0) {
 			e.deleteFromWorld();
+			world.deleteEntity(e);
+			world.getManager(GroupManager.class).removeFromAllGroups(e);
 		}
 	}
 }

@@ -91,11 +91,15 @@ public class CollisionSys extends EntityProcessingSystem {
 							EntityFactory.createExplosion(world,
 									epc.position.x, epc.position.y,
 									evc.velocity.x, evc.velocity.y);
+							world.deleteEntity(e);
+							world.getManager(GroupManager.class).removeFromAllGroups(e);
 //							Gdx.app.log("Collision", "Removing Entity");
 						}
 					} else {
 						// If the thing doesn't have health, it's a bullet
 						e.deleteFromWorld();
+						world.deleteEntity(e);
+						world.getManager(GroupManager.class).removeFromAllGroups(e);
 //						Gdx.app.log("Collision", "Removing Entity");
 					}
 
@@ -107,10 +111,14 @@ public class CollisionSys extends EntityProcessingSystem {
 									opc.position.x, opc.position.y,
 									ovc.velocity.x, ovc.velocity.y);
 //							Gdx.app.log("Collision", "Removing Entity");
+							world.deleteEntity(o);
+							world.getManager(GroupManager.class).removeFromAllGroups(o);
 						}
 					} else {
 						o.deleteFromWorld();
 //						Gdx.app.log("Collision", "Removing Entity");
+						world.deleteEntity(o);
+						world.getManager(GroupManager.class).removeFromAllGroups(o);
 					}
 				}
 			}
