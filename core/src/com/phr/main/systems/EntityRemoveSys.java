@@ -3,6 +3,7 @@ package com.phr.main.systems;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.Filter;
+import com.artemis.managers.GroupManager;
 import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
@@ -36,6 +37,8 @@ public class EntityRemoveSys extends EntityProcessingSystem {
 		
 		if (!inBounds(pc, dc)) {
 			e.deleteFromWorld();
+			world.deleteEntity(e);
+			world.getManager(GroupManager.class).removeFromAllGroups(e);
 			
 //			Gdx.app.log("Entity Remove", "Removed entity from the game");
 		}
