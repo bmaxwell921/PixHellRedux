@@ -37,7 +37,7 @@ public class InputSystem extends EntityProcessingSystem {
 		float yRate = 0;
 		if (accel) {
 			xRate = -Gdx.input.getAccelerometerX();
-			yRate = Gdx.input.getAccelerometerY();
+			yRate = -Gdx.input.getAccelerometerY();
 		} else if (Gdx.input.isKeyPressed(Keys.LEFT)) {
 			xRate = -1;
 		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
